@@ -5,4 +5,4 @@ This work is licensed under a [Creative Commons Attribution 3.0 Unported License
 
 ![Creative Commons Attribution 3.0 Unported License](http://i.creativecommons.org/l/by/3.0/88x31.png)
 
-The author is not affiliated with or endorsed by Twitter.
+The author is neither affiliated with nor endorsed by Twitter.
