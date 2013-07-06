@@ -1,0 +1,32 @@
+/*
+Sticky Footer by Ryan Fait
+http://ryanfait.com/
+http://ryanfait.com/resources/footer-stick-to-bottom-of-page/
+*/
+
+* {
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+}
+
+#wrapper {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -@footerHeight; /* the bottom margin is the negative value of the footer's height */
+}
+
+#footer, #push {
+	height: @footerHeight; /* #push must be the same height as footer */
+}
+
+#footer {
+    background-color: @footerBackground;
+}
+
+#footer > .container > .row {
+  margin-top: 20px;
+}

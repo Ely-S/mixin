@@ -1,0 +1,165 @@
+@import "stylesheets/components.less";
+@import "stylesheets/responsive.less"; // make it responsive
+
+
+li a, li a:hover {
+  color: inherit;
+}
+
+pre {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.navbar-search .search-query {
+  .border-radius(8px 10px 10px 8px);
+}
+
+i {
+  color: rgb(136, 136, 158);
+}
+
+.mixin > .mixin {
+  margin-left: 20px;
+}
+
+.js .noscript {
+  display: none;
+}
+
+.no-js #wrapper {
+  display: block;
+  visibility: visible;
+}
+
+.name:hover {
+  text-decoration: underline;
+}
+
+body {
+  background-image: url("patterns/retina_wood.png");
+  background-attachement: fixed;
+  color: #3D3D3D
+}
+
+#list > li {
+    font-family: 'Open Sans';
+    list-style-type: none;
+    cursor: pointer;
+    font-weight: bold;
+
+}
+
+.lead {
+  margin-bottom: 0px;
+}
+
+.container, {
+  .border-radius(2px);
+  max-width: 730px;
+}
+
+#bigCurly {
+    font-size: 70px;
+    float: right;
+}
+
+.section {
+    font-style: italic;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#content {
+    max-width: 800px;
+    padding: 10px;
+    padding-bottom: 40px;
+    background-color: #FDFDFD;
+    border-bottom: 1px solid #D8D8D8;
+}
+
+#footer {
+  .box-shadow(0px 0px 4px 1px #CCC);
+  .container {
+    margin: auto;
+  }
+}
+
+.nav select {
+  margin: 2px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+
+.navbar-inner {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+#wrapper {
+  margin-bottom: -100px;
+}
+
+.eighty-five {
+  .opacity(85);
+}
+
+#content li {
+  padding: 5px;
+  font-size: 14px;
+  line-height: 25px;
+}
+
+.mixin small {
+  font-size: 50%;
+}
+
+.var {
+  font-style: italic;
+}
+
+h3, h4, select {
+  text-decoration: underline;
+  text-transform: capitalize;
+}
+
+@media only screen and (min-width : 1100px) {
+  #wrapper {
+    box-shadow:  0 -8px 10px #292929 inset;
+  }
+}
+
+@media only screen and (max-width: @navbarCollapseWidth) {
+  .nav-collapse .nav>li>a:hover, .nav-collapse .dropdown-menu li:hover {
+      background-color: rgba(255, 253, 239, 0.44);
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  body {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+     margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+@media only screen and (min-width: 767px) {
+
+  .navbar-inner {
+    height: 0px;
+  }
+
+
+  #content {
+    .box-shadow(0px 0px 5px #292929);
+    padding-left: 40px;
+    padding-top: 45px;
+  }
+  #wrapper {
+    padding-top: 60px;
+  }
+}
+
+@import "stylesheets/print.less"; // include print styles
