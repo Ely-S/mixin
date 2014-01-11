@@ -1,13 +1,13 @@
 (function ($) {
     "use strict";
+    // Parsing less using regexs sounded like a good idea at the time
     var matchMixin = /^\s*([\.\#][^\[]*\)?)\s*[^\[]*\{$/,
-        open_tags = [],
-        prevline,
-        prevmixin,
-        section,
-        fake = 0,
         sections = [],
         list = document.createDocumentFragment(),
+        fake = 0,
+        open_tags = [],
+        prevmixin,
+        section,
         render,
         Mixin,
         matchLine,
@@ -29,7 +29,7 @@
             // remove unneccessary spaces, join codelines, highlight comments
             var spaces = t.codeLines[0].search(/[^\ ]/);
             this.childNodes[1].innerHTML = t.codeLines.map(function (line) {
-                return line.slice(spaces, line.length).replace(/\/\/ (.*)$/, "<i>// $1</i>");// highlight comments
+                return line.slice(spaces, line.length).replace(/(\/\/.*)$/, "<i>$1</i>");// highlight comments
             }).join("\n").replace(/@([A-Za-z\-]+)/g, "<span class='var muted'>$&</span>").replace(/\/\*(.*)\*\//g, "<i>/*$1*/</i>");
             delete t.codeLines;
         });
@@ -40,7 +40,7 @@
 
         template: function () {
             this.e.innerHTML = "<span class='name'>" + this.name.replace(/@([A-Za-z\-]+)/g, "<span class='var muted'>$&</span><small> </small>")
-                                + "</span><pre class='hide'></pre>";
+                + "</span><pre class='hide'></pre>";
         },
 
         add: function (ob) {
@@ -73,10 +73,7 @@
         var start = Date.now(), menu, options, searchList;
 
         // parse the source
-        data.split("\n").forEach(function (line) {
-            matchLine(line);
-            prevline = line;
-        });
+        data.split("\n").forEach(matchLine);
 
         $(document).ready(function ($) {
 
@@ -87,10 +84,10 @@
 
             options = document.createDocumentFragment();
 
-            sections.forEach(function (s) {
+            sections.forEach(function (text) {
                 var op = document.createElement("option");
-                op.textContent = s;
-                op.value = "#" + s;
+                op.textContent = text;
+                op.value = text;
                 options.appendChild(op);
             });
 
@@ -98,14 +95,13 @@
 
             $("#menu").change(function () {
                 searchList.show();
-                window.location = this.value;
+                window.location = "#" + this.value;
             }).append(options);
 
             $("#searcher").on("keyup keydown", function () {
                 if (this.value === "") return searchList.show();
-                var reg = new RegExp(this.value, "i"); // it doesn't work when parent is hidden
                 searchList.hide().filter(function (i, e) {
-                    return reg.test(e.model.name);
+                    return e.model.name.search(this.value) > 0;
                 }).show().trigger("show").find(".mixin").show();
             });
 
@@ -113,7 +109,7 @@
 
             if ($(window).width() > 767) {
                 $("#content").animate({ pseudoShadow: 9}, { duration: 300, step: function (now, fx) {
-                    var style = "box-shadow: 0 1px " + Math.floor(now) + "px #292929;";
+                    var style = "box-shadow: 0 1px " + Math.floor(now) + "px rgba(41, 41, 41, 0.79);";
                     style = style + "-moz-" + style + "-webkit-" + style;
                     this.setAttribute("style", style);
                 }});
@@ -121,11 +117,10 @@
         });
     });
 
-    // Tip: using regexes to parse LESS was more complicated than it sounded.
-    matchLine = function (line) {
+    matchLine = function (line, index, array) {
         var sec, m, name, len, lm, last_open;
         if (/^\/\/\s+\-{10,60}$/.test(line)) {
-            sec = /\/\/\s+([A-Z].*)$/.exec(prevline); // Matches Sections
+            sec = /\/\/\s+([A-Z].*)$/.exec(array[--index]); // Matches Sections
             name = sec[1].toLowerCase();
             if (name === "mixins") return; // Don't need this section
             sections.push(name);
@@ -133,6 +128,12 @@
             section = sec;
         } else if (lm = matchMixin.exec(line)) {// its a mixin
             m = new Mixin(lm[1]);
+
+            for (index--; array[index].trim()[0]=="/";  index--) {
+                m.codeLines.push(array[index]);
+            }
+            m.codeLines.reverse(); // because we added them
+
             if (open_tags.length === 0) {
                 list.appendChild(m.e);
             } else {
@@ -145,11 +146,13 @@
         } else if (/\{/.test(line)) { // Matches other open brackets
             fake++;
         }
+
         // Add this line of code to every open mixin
         len = open_tags.length;
         while (len--) {
             open_tags[len].codeLines.push(line);
         }
+
         if (/\}/.test(line)) {
             if (!fake) {
                 if (open_tags.length) {
@@ -160,6 +163,5 @@
             }
         }
     };
-
 
 }(jQuery));
