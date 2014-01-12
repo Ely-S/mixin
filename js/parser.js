@@ -26,11 +26,13 @@
             $(".hide:first", this).toggle(200);
             e.stopPropagation();
         }).one("mouseover", function () {
-            // remove unneccessary spaces, join codelines, highlight comments
-            var spaces = t.codeLines[0].search(/[^\ ]/);
+            // remove unneccessary spaces, join codeLines, highlight comments
+            var spaces = t.codeLines[0].search(/[^\ ]/); // the number of leading spaces
             this.childNodes[1].innerHTML = t.codeLines.map(function (line) {
-                return line.slice(spaces, line.length).replace(/(\/\/.*)$/, "<i>$1</i>");// highlight comments
-            }).join("\n").replace(/@([A-Za-z\-]+)/g, "<span class='var muted'>$&</span>").replace(/\/\*(.*)\*\//g, "<i>/*$1*/</i>");
+                return line.slice(spaces, line.length).replace(/(\/\/.*)$/, "<i>$1</i>"); // highlight comments
+            }).join("\n")
+            .replace(/@([A-Za-z\-]+)/g, "<span class='var muted'>$&</span>") // highlight variables
+            .replace(/\/\*(.*)\*\//g, "<i>/*$1*/</i>"); // highlight multiline comments
             delete t.codeLines;
         });
     };
@@ -99,9 +101,10 @@
             }).append(options);
 
             $("#searcher").on("keyup keydown", function () {
-                if (this.value === "") return searchList.show();
+                var val = this.value.replace(/\(\)\./, "");
+                if (val === "") return searchList.show();
                 searchList.hide().filter(function (i, e) {
-                    return e.model.name.search(this.value) > 0;
+                    return e.model.name.indexOf(val) > 0;
                 }).show().trigger("show").find(".mixin").show();
             });
 
